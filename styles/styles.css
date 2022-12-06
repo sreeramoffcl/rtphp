@@ -379,6 +379,14 @@ nav.close ~ .dashboard .top{
   cursor: pointer;
 }
 
+.dashboard tbody td a[disabled],
+.dashboard tbody td a[disabled]:hover{
+  /* pointer-events: none; */
+  cursor: not-allowed;
+  color: #212529;
+  opacity: 0.5;
+}
+
 .dashboard tbody tr:nth-child(odd){
   background: #DEE2E6;
 }
@@ -389,13 +397,12 @@ nav.close ~ .dashboard .top{
 
 .dashboard table thead,.dashboard tbody tr{
   display: table;
-    table-layout: fixed;
+  table-layout: fixed;
 }
 
 .dashboard .footer{
   width: 100%;
   position: fixed;
   bottom: 0;
-  
   border-top: 1px solid #CED4DA;
 }

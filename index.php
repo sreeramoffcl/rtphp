@@ -12,6 +12,7 @@
     <title>RT Software</title>
   </head>
   <body>
+  <!-- Navigation -->
     <nav>
       <div class="logo-name">
         <div class="logo-image">
@@ -57,6 +58,7 @@
         </ul>
       </div>
     </nav>
+    <!-- main page  -->
     <section class="dashboard">
       <div class="top">
         <i class="fa-solid fa-chevron-left sidebar-toggle"></i>
@@ -80,7 +82,7 @@
           <input type="text" name="draw_no" id="draw_no">
           <div id="new-line"></div>
           <label>Description</label>
-          <input type="text" name="descr" id="descr">
+          <input type="text" name="descr" id="descr" style="width:36.5em">
           
           <label>Weight</label>
           <input type="number" name="weight" id="weight">
@@ -109,6 +111,7 @@
 
         <input class="search-box" id="search-box" type="text" placeholder="Search...">
         <div class="table-container">
+          <!-- table  -->
         <table id="table">
           <thead>
             <tr>
@@ -120,19 +123,19 @@
               <th>Action</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="tbody">
             <?php
               if ($result->num_rows > 0) {
                 // output data of each row
                 while($row = $result->fetch_assoc()) {
 
-                echo "<tr>";
-                      echo "<td>" . $row['prod_code'] . "</td><td>". $row['item_code'] . "</td><td>". $row['draw_no'] . "</td><td>". $row['descr'] . "</td><td>". $row['weight'] . "</td>";
+                echo "<tr id=". $row['id'] . ">";
+                      echo "<td class='row-item'>" . $row['prod_code'] . "</td><td class='row-item'>". $row['item_code'] . "</td><td class='row-item'>". $row['draw_no'] . "</td><td class='row-item'>". $row['descr'] . "</td><td class='row-item'>". $row['weight'] . "</td>";
                 ?>
-                    <td>
-                      <a><i class="fa-solid fa-pencil"></i></a>&nbsp;
-                      <a><i class="fa-solid fa-trash"></i></a>
-                  </td>
+                    <td class="row-btn">
+                      <a class="edit-row"><i class="fa-solid fa-pencil"></i></a>&nbsp;
+                      <a class="delete-row"><i class="fa-solid fa-trash"></i></a>
+                    </td>
                     </tr>
                   <?php
 
@@ -144,12 +147,6 @@
           </tbody>
         </table>
         </div>
-        <div class="footer">
-        <div class="button update-button">
-          <button type="button">Update</button>
-        </div>
-        </div>
-        
       </div>
       
     </section>
@@ -157,7 +154,7 @@
     
     <script>
       $(document).ready(function(){
-        
+        // rotate caret icon
         $(".sub-btn").click(function(){
           $(this).next(".sub-menu").slideToggle();
           $(this).find(".dropdown").toggleClass("rotate");
@@ -169,7 +166,8 @@
           $(".sub-btn").removeClass("active");
           
         })
-
+        
+        // filter table items through search bar
         $("#search-box").on("keyup", function() {
         var value = $(this).val().toLowerCase();
         $("#table tbody tr").filter(function() {
