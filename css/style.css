@@ -97,6 +97,10 @@ nav .menu-items{
   background: var(--select-color);
 }
 
+.menu-items .disabled{
+  cursor: not-allowed;
+}
+
 .menu-items li .sub-btn.active{
   background: var(--select-color);
 }
@@ -341,7 +345,7 @@ nav.close ~ .dashboard .top{
   border-collapse: collapse;
   width: 70rem;
   margin: 1em 2em;
-  height: 269px;
+  height: 30em;
   
 }
 

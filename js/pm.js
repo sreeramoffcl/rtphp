@@ -4,24 +4,48 @@ document.getElementsByTagName('head')[0].appendChild(script); // add jquery
 
 const body = document.querySelector("body"),
 sidebar = body.querySelector("nav");
-
 // for nav
 var sidebarToggle = body.querySelector(".sidebar-toggle");
 var linkName = body.querySelectorAll(".link");
 var subMenu = body.querySelectorAll(".sub-menu");
 var addButton = document.getElementById("add-button");
+
 var prod_code = document.getElementById("prod_code");
 var item_code = document.getElementById("item_code");
 var draw_no = document.getElementById("draw_no");
 var descr = document.getElementById("descr");
 var weight = document.getElementById("weight");
+
 var tbody = document.querySelector('tbody');
 
 var deleteRowBtn = body.querySelectorAll(".delete-row");
 var editRowBtn = body.querySelectorAll(".edit-row");
 var editActive = false; // whether edit button is clicked or not
 
-function toggleSidebar(event){
+function navbarActions(){
+    // rotate caret icon
+    $(".sub-btn").on("click",function(){
+        $(this).next(".sub-menu").slideToggle();
+        $(this).find(".dropdown").toggleClass("rotate");
+        $(this).toggleClass("active"); 
+    });
+    $(".sidebar-toggle").on("click",function(){
+        $(".sub-btn").next(".sub-menu").slideUp();
+        $(".sub-btn").find(".dropdown").removeClass("rotate");
+        $(".sub-btn").removeClass("active");
+        
+    });
+    
+    // filter table items through search bar
+    $("#search-box").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#table tbody tr").filter(function() {
+        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1);
+        });
+    });
+}
+
+function toggleSidebar(){
     sidebar.classList.toggle("close");
     if(sidebar.classList.contains("close")){
         localStorage.setItem("status", "close");
@@ -41,14 +65,13 @@ function toggleLink(event){
 }
 
 
-function addRow(event){
+function pmAddRow(){
     if(!editActive){
         var prod = prod_code.value;
         var item = item_code.value;
         var draw = draw_no.value;
         var desc = descr.value;
         var weightVal = weight.value;
-
         // update database
         $.ajax({
             url: "functions.php",
@@ -92,32 +115,34 @@ function addRow(event){
 
 }
 
-function deleteRow(){
+function pmDeleteRow(){
     if(!editActive){
-        if(confirm("Delete data?")){
-            var index, table = document.getElementById("table");
-            index = this.closest("tr").rowIndex;
-            var id = this.closest("tr").id;
-            table.deleteRow(index);
-            $.ajax({
-                url: "functions.php",
-                type: "POST",
-                data: {
-                    function: 2,
-                    id: id
-                    },
-                success: function(data) {
-                alert("deleted");
-                }
-            });
+            if(confirm("Delete data?")){
+                var index, table = document.getElementById("table");
+                index = this.closest("tr").rowIndex;
+                var id = this.closest("tr").id;
+                table.deleteRow(index);
+                $.ajax({
+                    url: "functions.php",
+                    type: "POST",
+                    data: {
+                        function: 2,
+                        id: id
+                        },
+                    success: function(data) {
+                    alert("deleted");
+                    }
+                });
+            }
         }
-    }
-    
 }
 
+
 // cancel edit action
-function cancel(event){
+function pmCancel(){
     if(editActive){
+        $("#nav").css("pointer-events", "auto");
+        $(".top").css("pointer-events", "auto");
         var index, table = document.getElementById("table");
         index = this.closest("tr").rowIndex;
         var children = this.closest("tr").getElementsByClassName("row-item");
@@ -137,14 +162,20 @@ function cancel(event){
         var editBtnfunc = rowBtns[0].getElementsByClassName("edit-row")[0];
         var deleteBtnfunc = rowBtns[0].getElementsByClassName("delete-row")[0];
         editBtnfunc.addEventListener("click", editRow);
-        deleteBtnfunc.addEventListener("click", deleteRow);
+        deleteBtnfunc.addEventListener("click", pmDeleteRow);
+        sidebarToggle.addEventListener("click", toggleSidebar); // open and close nav bar
+
+        linkName.forEach(item=>{item.addEventListener("click", toggleLink);}); // rotate caret
+
 
     }
     editActive = false;
 }
 
-function save(event){
+function pmSave(){
     if(editActive){
+        $("#nav").css("pointer-events", "auto");
+        $(".top").css("pointer-events", "auto");
         var index, table = document.getElementById("table");
         var id = this.closest("tr").id;
         var children = this.closest("tr").getElementsByClassName("row-item");
@@ -165,7 +196,10 @@ function save(event){
         var editBtnfunc = rowBtns[0].getElementsByClassName("edit-row")[0];
         var deleteBtnfunc = rowBtns[0].getElementsByClassName("delete-row")[0];
         editBtnfunc.addEventListener("click", editRow);
-        deleteBtnfunc.addEventListener("click", deleteRow);
+        deleteBtnfunc.addEventListener("click", pmDeleteRow);
+        sidebarToggle.addEventListener("click", toggleSidebar); // open and close nav bar
+
+        linkName.forEach(item=>{item.addEventListener("click", toggleLink);}); // rotate caret
 
         var saveProd_code = children[0].innerHTML;
         var saveItem_code = children[1].innerHTML;
@@ -196,9 +230,13 @@ function save(event){
     editActive = false;
 }
 
-function editRow(event){
+
+function editRow(){
     if(!editActive){
+        $("#nav").css("pointer-events", "none");
+        $(".top").css("pointer-events", "none");
         var index, table = document.getElementById("table");
+
         index = this.closest("tr").rowIndex;
         var children = this.closest("tr").getElementsByClassName("row-item");
         for (var i = 0; i< children.length; i++){
@@ -214,11 +252,13 @@ function editRow(event){
             otherEditRowBtn[i].setAttribute("disabled", true);
             otherDeleteRowBtn[i].setAttribute("disabled", true);
         }
-
         var cancelBtn = table.querySelector(".cancel-row");
-        cancelBtn.addEventListener("click", cancel);
+        cancelBtn.addEventListener("click", pmCancel);
+        
         var saveBtn = table.querySelector(".save-row");
-        saveBtn.addEventListener("click", save);
+       
+        saveBtn.addEventListener("click", pmSave);
+       
     }
     
     editActive = true;
@@ -228,6 +268,8 @@ sidebarToggle.addEventListener("click", toggleSidebar); // open and close nav ba
 
 linkName.forEach(item=>{item.addEventListener("click", toggleLink);}); // rotate caret
 
-addButton.addEventListener("click", addRow); // add row in table and add record in mysql
-deleteRowBtn.forEach(item=>{item.addEventListener("click", deleteRow);}); // delete row in table and delete record in mysql
+addButton.addEventListener("click",pmAddRow); // add row in table and add record in mysql
+deleteRowBtn.forEach(item=>{item.addEventListener("click",pmDeleteRow)}); // delete row in table and delete record in mysql
 editRowBtn.forEach(item=>{item.addEventListener("click", editRow);}); // edit row in table
+
+navbarActions();

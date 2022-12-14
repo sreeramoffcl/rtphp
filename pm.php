@@ -4,19 +4,19 @@
   <head>
     <meta charset="utf-8">
     <!-- <title>Responsive Sidebar Menu</title> -->
-    <link rel="stylesheet" href="styles/styles.css">
+    <link rel="stylesheet" href="css/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles/font-awesome/css/all.min.css"/>
+    <link rel="stylesheet" href="fonts/font-awesome/css/all.min.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.0/jquery.min.js"></script>
     <title>RT Software</title>
   </head>
   <body>
   <!-- Navigation -->
-    <nav>
+    <nav id="nav">
       <div class="logo-name">
         <div class="logo-image">
-          <img src="styles/r.png" alt="">
+          <img src="img/r.png" alt="">
         </div>
         <span class="logo_name">Menu</span>
       </div>
@@ -35,7 +35,7 @@
             </a>
             <div class="link-name sub-menu">
               <a href="#" class="sub-item">Product Master</a>
-              <a href="#" class="sub-item">Customer Master</a>
+              <a href="cm.php" class="sub-item">Customer Master</a>
             </div>
           </li>
           <li class="link">
@@ -90,17 +90,8 @@
           
         </form>
         <?php
-        $servername = "localhost";
-        $username = "root";
-        $password = "password";
-        $dbname = "rt_data";
-        // Create connection
-        $conn = mysqli_connect($servername, $username, $password, $dbname);
-        // Check connection
-        if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-        }
-
+        require 'connection.php';
+        
         $select_query = "SELECT id, prod_code, item_code,draw_no, descr, `weight` FROM prod_master";
         $result = $conn->query($select_query);
         ?>
@@ -150,33 +141,6 @@
       </div>
       
     </section>
-    <script src="script.js" async></script>
-    
-    <script>
-      $(document).ready(function(){
-        // rotate caret icon
-        $(".sub-btn").click(function(){
-          $(this).next(".sub-menu").slideToggle();
-          $(this).find(".dropdown").toggleClass("rotate");
-          $(this).toggleClass("active"); 
-        });
-        $(".sidebar-toggle").click(function(){
-          $(".sub-btn").next(".sub-menu").slideUp();
-          $(".sub-btn").find(".dropdown").removeClass("rotate");
-          $(".sub-btn").removeClass("active");
-          
-        })
-        
-        // filter table items through search bar
-        $("#search-box").on("keyup", function() {
-        var value = $(this).val().toLowerCase();
-        $("#table tbody tr").filter(function() {
-          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-          });
-        });
-
-
-      })
-    </script>
+    <script src="js/pm.js" page="pm" async></script>
   </body>
 </html>

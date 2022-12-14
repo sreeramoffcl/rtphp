@@ -1,14 +1,5 @@
 <?php
-    $servername = "localhost";
-    $username = "root";
-    $password = "password";
-    $dbname = "rt_data";
-    // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    // Check connection
-    if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
-    }
+    require 'connection.php';
     
     $function = $_POST['function'];
     if ($function == 1){
@@ -70,6 +61,79 @@
             echo '<div class="container"><h4>Your Form successfully submitted!</h4></div>';
             echo "<script>console.log('register.php','_self')</script>";
 
+        } 
+        else
+        { 
+            echo "ERROR: Could not able to execute $sql. "
+            .$conn->error;
+        } 
+    }
+    elseif ($function == 11){
+        $add_cust_code = $_POST['cust_code'];
+        $add_cust_name = $_POST['cust_name'];
+        $add_gst = $_POST['gst'];
+        $add_pan = $_POST['pan'];
+        $add_add_1 = $_POST['add_1'];
+        $add_add_2 = $_POST['add_2'];
+        $add_add_3 = $_POST['add_3'];
+        $add_pincode = $_POST['pincode'];
+    
+        $sqlquery = "INSERT INTO `cust_master`
+        (`cust_code`, `cust_name`,`gst`, `pan`, `add_1`, `add_2`, `add_3`, `pincode`)
+         VALUES ('$add_cust_code', '$add_cust_name', '$add_gst', '$add_pan', '$add_add_1', '$add_add_2', '$add_add_3', '$add_pincode')";
+        
+        if ($conn->query($sqlquery) === true) 
+        { 
+            echo '<div class="container"><h4>Your Form successfully submitted!</h4></div>';
+            echo "<script>console.log('register.php','_self')</script>";
+
+        } 
+        else
+        { 
+            echo "ERROR: Could not able to execute $sql. "
+            .$conn->error;
+        } 
+    }
+    elseif ($function == 12){
+        $del_id = $_POST['id'];
+        $sqlquery = "DELETE FROM `cust_master` WHERE `id`= '$del_id'";
+        
+        if ($conn->query($sqlquery) === true) 
+        { 
+            echo '<div class="container"><h4>Your Form successfully submitted!</h4></div>';
+            
+        } 
+        else
+        { 
+            echo "ERROR: Could not able to execute $sql. "
+            .$conn->error;
+        } 
+    }
+    elseif ($function == 13){
+        $save_id = $_POST['id'];
+        $save_cust_code = $_POST['cust_code'];
+        $save_cust_name = $_POST['cust_name'];
+        $save_gst = $_POST['gst'];
+        $save_pan = $_POST['pan'];
+        $save_add_1 = $_POST['add_1'];
+        $save_add_2 = $_POST['add_2'];
+        $save_add_3 = $_POST['add_3'];
+        $save_pincode = $_POST['pincode'];
+    
+        $sqlquery = "UPDATE `cust_master` SET
+            `cust_code` = '$save_cust_code',
+            `cust_name` = '$save_cust_name',
+            `gst` = '$save_gst',
+            `pan` = '$save_pan', 
+            `add_1` = '$save_add_1', 
+            `add_2` = '$save_add_2',
+            `add_3` = '$save_add_3',
+            `pincode` = '$save_pincode'
+            WHERE `id` = '$save_id'";
+        
+        if ($conn->query($sqlquery) === true) 
+        { 
+            echo "sucess";
         } 
         else
         { 
