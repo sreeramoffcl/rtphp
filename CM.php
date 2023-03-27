@@ -45,7 +45,7 @@
               <span class="link-name">Transactions<i class="fa-solid fa-caret-right dropdown"></i></span>
             </a>
             <div class="link-name sub-menu">
-              <a href="#" class="sub-item">Material Inward</a>
+              <a href="matInw.php" class="sub-item">Material Inward</a>
               <a href="#" class="sub-item">Material Outward</a>
             </div>
           </li>

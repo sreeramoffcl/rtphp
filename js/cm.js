@@ -297,7 +297,10 @@ function editRow(){
         $.ajax({
             url: "getData.php",
             type: "POST",
-            data: {id:id},
+            data: {
+                id:id,
+                function: 1
+            },
             //dataType:'json',
             success: function(result) {
                 

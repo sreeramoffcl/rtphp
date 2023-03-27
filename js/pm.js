@@ -22,6 +22,8 @@ var deleteRowBtn = body.querySelectorAll(".delete-row");
 var editRowBtn = body.querySelectorAll(".edit-row");
 var editActive = false; // whether edit button is clicked or not
 
+var saveId;
+
 function navbarActions(){
     // rotate caret icon
     $(".sub-btn").on("click",function(){
@@ -117,24 +119,24 @@ function pmAddRow(){
 
 function pmDeleteRow(){
     if(!editActive){
-            if(confirm("Delete data?")){
-                var index, table = document.getElementById("table");
-                index = this.closest("tr").rowIndex;
-                var id = this.closest("tr").id;
-                table.deleteRow(index);
-                $.ajax({
-                    url: "functions.php",
-                    type: "POST",
-                    data: {
-                        function: 2,
-                        id: id
-                        },
-                    success: function(data) {
-                    alert("deleted");
-                    }
-                });
-            }
+        if(confirm("Delete data?")){
+            var index, table = document.getElementById("table");
+            index = this.closest("tr").rowIndex;
+            var id = this.closest("tr").id;
+            table.deleteRow(index);
+            $.ajax({
+                url: "functions.php",
+                type: "POST",
+                data: {
+                    function: 2,
+                    id: id
+                    },
+                success: function(data) {
+                alert("deleted");
+                }
+            });
         }
+    }
 }
 
 
@@ -236,13 +238,23 @@ function editRow(){
         $("#nav").css("pointer-events", "none");
         $(".top").css("pointer-events", "none");
         var index, table = document.getElementById("table");
-
+        saveId = this.closest("tr").id;
         index = this.closest("tr").rowIndex;
         var children = this.closest("tr").getElementsByClassName("row-item");
+        var pc = children[0].innerHTML,ic = children[1].innerHTML,desc1= children[3].innerHTML,dn= children[2].innerHTML,wt= children[4].innerHTML;
         for (var i = 0; i< children.length; i++){
            
             children[i].setAttribute("contenteditable", true);
         }
+        $("#prod_code").val(pc);
+        $("#item_code").val(ic);
+        $("#draw_no").val(dn);
+        $("#descr").val(desc1);
+        $("#weight").val(wt);
+
+        $("#add-button").html("Save");
+        $("#add-button").attr("id", "save-button");
+
         var rowBtns = this.closest("tr").getElementsByClassName("row-btn");
         rowBtns[0].innerHTML = `<a class="save-row"><i class="fa-solid fa-check"></i></a>&nbsp;
         <a class="cancel-row"><i class="fa-solid fa-x"></i></a>`;
@@ -260,9 +272,56 @@ function editRow(){
         saveBtn.addEventListener("click", pmSave);
        
     }
+
+
     
     editActive = true;
 }
+
+$(document).on("click", "#save-button", function(e){
+        var saveProd_code = $("#prod_code").val();
+        var saveItem_code = $("#item_code").val();
+        var saveDraw_no = $("#draw_no").val();
+        var saveDesc =  $("#descr").val();
+        var saveWeight = $("#weight").val();
+        console.log(saveId);
+        var tr = document.getElementById(saveId).childNodes;
+        console.log(tr);
+        tr[0].innerHTML = saveProd_code;
+        tr[1].innerHTML = saveItem_code;
+        tr[2].innerHTML = saveDraw_no;
+        tr[3].innerHTML = saveDesc;
+        tr[4].innerHTML = saveWeight;
+        var data = {
+            function: 3,
+            id: saveId,
+            prod_code: saveProd_code,
+            item_code: saveItem_code,
+            draw_no: saveDraw_no,
+            descr: saveDesc,
+            weight: saveWeight
+            };
+
+        $.ajax({
+            url: "functions.php",
+            type: "POST",
+            data: data,
+            dataType:'json',
+            success: function(data) {
+                alert(data);
+            }
+        });
+        $("#prod_code").val("");
+        $("#item_code").val("");
+        $("#draw_no").val("");
+        $("#descr").val("");
+        $("#weight").val("");
+        saveId = "";
+
+        $("#save-button").html("Add");
+        $("#save-button").attr("id", "add-button");
+
+});
 
 sidebarToggle.addEventListener("click", toggleSidebar); // open and close nav bar
 

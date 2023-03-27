@@ -339,69 +339,120 @@ nav.close ~ .dashboard .top{
   opacity: 0.4;
 }
 
-.dashboard table{
-  display: flex;
-  flex-flow: column;
+.table-container {
+  margin-bottom: 20px;
+  font-size: 14px;
+  line-height: 1.5;
+  height: 33em;
+  color: #333;
+  overflow: auto;
+}
+
+#transactions-table {
+  width: 100%;
   border-collapse: collapse;
-  width: 70rem;
-  margin: 1em 2em;
-  height: 30em;
-  
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.dashboard .table-container{
-  height: 10em;
-}
-
-.dashboard table thead{
-  flex: 0 0 auto;
-  width: calc(100% - 0.9em);
+#transactions-table th, #transactions-table td {
+  padding: 12px 15px;
   text-align: left;
 }
 
-.dashboard thead, tbody{
-  display: block;
+#transactions-table thead tr{
+  position: sticky;
+  z-index: 1;
+  top: 0;
 }
 
-.dashboard tbody{
-  flex: 1 1 auto;
-    display: block;
-    overflow-y: scroll;
+#transactions-table tbody tr:first-child{
+  position: sticky;
+  top: 65px;
+  z-index: 1;
+  background-color: #f8f8f8;
 }
 
-.dashboard tbody tr{
+.rt-data-row{
+  position: sticky;
+  top: 65px;
+  z-index: 1;
+}
+
+#transactions-table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+  border-bottom: 2px solid #ccc;
+  z-index: 2;
+}
+
+#transactions-table td {
+  border-bottom: 1px solid #ccc;
+}
+
+#transactions-table tr:hover {
+  background-color: #f5f5f5;
+}
+
+#transactions-table input[type="text"], #transactions-table input[type="date"], #transactions-table select {
   width: 100%;
-  min-height: 75px;
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.rt-data-row button{
+  /* margin: 1em 2em; */
+  align-items: center;
+  background-color: var(--button-color);
+  border: 0;
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 20px;
+  max-width: 480px;
+  min-height: 30px;
+  /* min-width: 90px; */
+  overflow: hidden;
+  padding: 0px;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: center;
+  touch-action: manipulation;
+  transition: background-color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, box-shadow 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s, color 0.167s cubic-bezier(0.4, 0, 0.2, 1) 0s;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: middle;
 }
 
-.dashboard tbody td a{
-  padding: 1em;
+.rt-data-row button:hover {
+  background-color: #16437E;
+  color: #ffffff;
 }
 
-.dashboard tbody td a:hover{
-  color: #0A66C2;
+.edit-button, .delete-button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
   cursor: pointer;
 }
 
-.dashboard tbody td a[disabled],
-.dashboard tbody td a[disabled]:hover{
-  /* pointer-events: none; */
-  cursor: not-allowed;
-  color: #212529;
-  opacity: 0.5;
+.edit-button:hover, .delete-button:hover {
+  background-color: #3e8e41;
 }
 
-.dashboard tbody tr:nth-child(odd){
-  background: #DEE2E6;
-}
-.dashboard table th, td{
-  padding: 12px 12px;
-  border: 1px solid #ADB5BD;
+.edit-button {
+  margin-right: 5px;
 }
 
-.dashboard table thead,.dashboard tbody tr{
-  display: table;
-  table-layout: fixed;
+.delete-button {
+  margin-left: 5px;
 }
 
 .dashboard .footer{
@@ -409,4 +460,60 @@ nav.close ~ .dashboard .top{
   position: fixed;
   bottom: 0;
   border-top: 1px solid #CED4DA;
+}
+
+.info-table-container{
+  visibility: hidden;
+  position: absolute;
+  top: 10%;
+  height:520px;
+  z-index: 999;
+  width: 75%;
+  margin: 0 auto;
+  border: black solid 1px;
+  background-color: #CED4DA;
+  padding: 10px;
+  left: 10%;
+  -webkit-backdrop-filter: sepia(100%);
+  backdrop-filter: sepia(100%);
+}
+
+.info-table-container table {
+  background-color: #CED4DA;
+  border: 1px solid #ccc;
+  height: 100%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-infoTable{
+  bottom:10px;
+  text-decoration: none;
+  padding:10px;
+  position: absolute;
+  background-color:#495057;
+  color: #DEE2E6;
+  font-weight: 20;
+  right: 10em;
+}
+
+.cancel-infoTable:hover{
+  text-decoration: none;
+  bottom:10px;
+  padding:10px;
+  position: absolute;
+  background-color:#6C757D;
+  color: #DEE2E6;
+  font-weight: 20;
+  right: 10em;
+}
+
+.blur .blur-active{
+  filter:blur(20px);
+  pointer-events: none;
+  user-select: none;
+  -moz-filter: blur(1px);
+  -webkit-filter: blur(1px);
+  -o-filter: blur(1px);
+  -webkit-backdrop-filter: sepia(100%);
+  backdrop-filter: sepia(100%);
 }
